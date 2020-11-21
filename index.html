@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Short Put Calculator</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<style>
+
+		body {text-align: center;}
+		table, th, td {
+  border: 1px solid black;
+}
+		.width-30 {width: 30%;}
+		.jumbotron {margin-top: 20px;}
+		.spacing {margin-top: 30px;}
+		.red {color: red !important;}
+	</style>
+</head>
+<body>
+	<div class="spacing"></div>
+
+<div class="container">
+  <!-- Content here -->
+  <h1>Short Put Calculator</h1>
+			  <div class="row" id="input">
+			  	<div class="col">
+			  	
+
+					  	<!-- <form > -->
+							<table class="table table-bordered">
+
+							  <tbody>
+							    <tr>
+							      <td class="width-30">Type</td>
+							      <td>Put</td>
+
+							    </tr>
+							    <tr>
+							      <td>Expiry Date:</td>
+							      <td ><input type="date" class="form-control" id="date" value="" required></td>
+							    </tr>
+							    <tr>
+							      <td>Strike Price:
+							      <small class="form-text text-muted red">(Required)</small></td>
+							      <td><input type="number" class="form-control" id="strikePrice" placeholder="e.g. 50" value="" required></td>
+							    </tr>
+							    <tr>
+							      <td>Premium(the price of the put):<small class="form-text text-muted red">(Required)</small></td>
+							      <td><input type="number" class="form-control" id="premium" placeholder="e.g. 10" value="" required></td>
+							    </tr>
+							    <tr>
+							      <td>Interval(+-):</td>
+							      <td><input type="number" class="form-control" id="interval" value="1" required></td>
+							    </tr>
+							    <tr>
+							      <td>Current Price of the Stock:</td>
+							      <td><input type="number" class="form-control" id="price" placeholder="optional to enter value e.g. 40" value=""></td>
+							    </tr>
+							    <tr>
+							      <td>Captial Requried:</td>
+							      <td><input type="number" class="form-control" id="capital" placeholder="Auto generated" disabled value=""></td>
+							    </tr>
+
+							  </tbody>
+							</table>
+					
+					  <button type="submit" class="btn btn-primary" onclick="myFunction()">Submit</button>
+					<!-- </form> -->
+
+				</div>
+			  	
+			  </div>
+
+  <div class="row" id="output">
+  	<div class="col">
+  		<div class="jumbotron">
+  <h1 class="display-4">Results</h1>
+  
+</div>
+  							<table class="table table-bordered" id="output-table">
+
+							  <tbody id="result">
+							    
+							  </tbody>
+							</table>
+
+  	</div>
+  	
+  </div>
+
+
+
+
+</div>
+
+
+<script>
+
+
+
+function myFunction() {
+
+	var date = document.getElementById("date").value;
+	var strikePrice = document.getElementById("strikePrice").value;
+	var premium = document.getElementById("premium").value;
+	var interval = document.getElementById("interval").value;
+	var price = document.getElementById("price").value;
+	var capital = strikePrice*100;
+  document.getElementById("capital").value = strikePrice*100;
+  	var pirceList =[parseInt(strikePrice)];
+  	var temp = strikePrice;
+  	for(var i=0;i<10;i++){
+  		temp = temp - interval;
+  		if (temp >= 0)
+  			pirceList.push(temp);
+  	}
+  	temp = strikePrice;
+  	for(var i=0;i<10;i++){
+  		temp = parseInt(temp) + parseInt(interval);
+  		pirceList.push(temp);
+  	}
+
+  	pirceList.sort(function(a, b){return a-b});
+  	console.log(pirceList);
+
+  	var table = document.getElementById("result");
+  	table.remove();
+  	table = document.createElement("tbody");
+  	table.id = "result";
+  	document.getElementById("output-table").appendChild(table);
+
+  	var tr1 = document.createElement("tr");
+  	var tr2 = document.createElement("tr");
+
+	var td3 = document.createElement("td");
+  	var data3 = document.createTextNode("Rate of return:");
+  	td3.appendChild(data3);
+  	var td2 = document.createElement("td");
+  	var data2 = document.createTextNode("Profits");
+  	td2.appendChild(data2);
+  	var td1 = document.createElement("td");
+  	var data1 = document.createTextNode("Price of stock");
+  	td1.appendChild(data1);
+
+
+  	tr1.appendChild(td1);
+  	tr1.appendChild(td2);
+  	tr1.appendChild(td3);
+  	td3.appendChild(tr2);
+  	result.appendChild(tr1);
+
+
+  	var len = pirceList.length;
+  	for(var i=0;i<len;i++){
+
+  		  	var tr1 = document.createElement("tr");
+		  	var tr2 = document.createElement("tr");
+
+		  	var profits = 0;
+		  	if(pirceList[i]<strikePrice)
+		  		profits = Math.round((+premium-strikePrice+pirceList[i])*100);
+		  	else
+		  		profits = premium*100;
+
+		  	var td2 = document.createElement("td");
+		  	var data2 = document.createTextNode("$"+profits);
+		  	if(profits <0)
+		  		td2.style.backgroundColor = 'rgb(' + [254, 199, 206].join(',') + ')';
+		  	else
+		  		td2.style.backgroundColor = 'rgb(' + [198,239,205].join(',') + ')';
+		  	td2.appendChild(data2);
+
+		  	var td1 = document.createElement("td");
+		  	var data1 = document.createTextNode("$"+pirceList[i]);
+		  	td1.appendChild(data1);
+
+		  	var ror = Math.round((profits/capital)*100) + "%";
+		  	var td3 = document.createElement("td");
+		  	var data3 = document.createTextNode(ror);
+		  	if(profits <0)
+		  		td3.style.backgroundColor = 'rgb(' + [254, 199, 206].join(',') + ')';
+		  	else
+		  		td3.style.backgroundColor = 'rgb(' + [198,239,205].join(',') + ')';
+		  	td3.appendChild(data3);
+
+
+		  	tr1.appendChild(td1);
+		  	tr1.appendChild(td2);
+		  	tr1.appendChild(td3);
+		  	td3.appendChild(tr2);
+		  	result.appendChild(tr1);
+  	}
+
+
+
+
+  								// <tr>	
+							   //    <td>Expiry Date:</td>
+							   //    <td>Expiry Date:</td>
+							   //    <td ><input type="date" class="form-control" id="date" value="" required></td>
+							   //  </tr>	
+
+
+
+}
+</script>
+
+</body>
+</html>
