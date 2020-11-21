@@ -84,16 +84,23 @@
 							</table>
 
   	</div>
+
   	
   </div>
-
+  	<div class="row" id="graph">
+  		<div class="col">
+  			<canvas id="myChart"></canvas>
+  		</div>
+  	</div>
 
 
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 
 <script>
+
 
 
 
@@ -148,7 +155,7 @@ function myFunction() {
   	td3.appendChild(tr2);
   	result.appendChild(tr1);
 
-
+  	var profitsList = [];
   	var len = pirceList.length;
   	for(var i=0;i<len;i++){
 
@@ -160,7 +167,7 @@ function myFunction() {
 		  		profits = Math.round((+premium-strikePrice+pirceList[i])*100);
 		  	else
 		  		profits = premium*100;
-
+		  	profitsList.push(profits);
 		  	var td2 = document.createElement("td");
 		  	var data2 = document.createTextNode("$"+profits);
 		  	if(profits <0)
@@ -190,14 +197,25 @@ function myFunction() {
 		  	result.appendChild(tr1);
   	}
 
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var chart = new Chart(ctx, {
+		    // The type of chart we want to create
+		    type: 'line',
 
+		    // The data for our dataset
+		    data: {
+		        labels: pirceList,
+		        datasets: [{
+		            label: 'Profits/Loss of the Short Put',
+		            backgroundColor: 'rgb(128, 128, 128)',
+		            borderColor: 'rgb(128, 128, 128)',
+		            data: profitsList
+		        }]
+		    },
 
-
-  								// <tr>	
-							   //    <td>Expiry Date:</td>
-							   //    <td>Expiry Date:</td>
-							   //    <td ><input type="date" class="form-control" id="date" value="" required></td>
-							   //  </tr>	
+		    // Configuration options go here
+		    options: {}
+		});
 
 
 
