@@ -147,9 +147,13 @@ function myFunction() {
   	var td1 = document.createElement("td");
   	var data1 = document.createTextNode("Price of stock");
   	td1.appendChild(data1);
+	var td4 = document.createElement("td");
+  	var data4 = document.createTextNode("$"+capital);
+  	td4.appendChild(data4);
 
 
   	tr1.appendChild(td1);
+  	tr1.appendChild(td4);
   	tr1.appendChild(td2);
   	tr1.appendChild(td3);
   	td3.appendChild(tr2);
@@ -161,6 +165,8 @@ function myFunction() {
 
   		  	var tr1 = document.createElement("tr");
 		  	var tr2 = document.createElement("tr");
+
+
 
 		  	var profits = 0;
 		  	if(pirceList[i]<strikePrice)
@@ -189,8 +195,13 @@ function myFunction() {
 		  		td3.style.backgroundColor = 'rgb(' + [198,239,205].join(',') + ')';
 		  	td3.appendChild(data3);
 
+			var td4 = document.createElement("td");
+		  	var data4 = document.createTextNode("$"+capital);
+		  	td4.appendChild(data4);		  	
+
 
 		  	tr1.appendChild(td1);
+		  	tr1.appendChild(td4);
 		  	tr1.appendChild(td2);
 		  	tr1.appendChild(td3);
 		  	td3.appendChild(tr2);
@@ -207,8 +218,8 @@ function myFunction() {
 		        labels: pirceList,
 		        datasets: [{
 		            label: 'Profits/Loss of the Short Put',
-		            backgroundColor: 'rgb(199, 199, 199)',
-		            borderColor: 'rgb(199, 199, 199)',
+		            // backgroundColor: 'rgb(199, 199, 199)',
+		            // borderColor: 'rgb(199, 199, 199)',
 		            data: profitsList
 		        }]
 		    },
